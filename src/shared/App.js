@@ -10,7 +10,7 @@ const App = () => {
 	return (
 		<React.Fragment>
 			<ConnectedRouter history={history}>
-				<Route path="/" components={Main} />
+				<Route path="/" component={Main} />
 			</ConnectedRouter>
 		</React.Fragment>
 	);

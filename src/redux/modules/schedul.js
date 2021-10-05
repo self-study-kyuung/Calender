@@ -1,9 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import { firestore } from '../../shared/firebase';
-import { collection, addDoc } from 'firebase/firestore';
-
-const db = firestore;
+import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 // ! initialState
 const initialState = {
@@ -19,8 +17,8 @@ const DELETE_EVENT = 'DELETE_EVENT';
 // ! action creators
 const createEvent = createAction(CREATE_EVENT, (list) => ({ list }));
 const setEvent = createAction(SET_EVENT, (set_list) => ({ set_list }));
-const updateEvent = createAction(UPDATE_EVENT, (list) => ({ list }));
-const deleteEvent = createAction(DELETE_EVENT, (list) => ({ list }));
+const updateEvent = createAction(UPDATE_EVENT, (id) => ({ id }));
+const deleteEvent = createAction(DELETE_EVENT, (id) => ({ id }));
 
 // ! reducers
 export default handleActions(
@@ -32,6 +30,23 @@ export default handleActions(
 		[SET_EVENT]: (state, action) =>
 			produce(state, (draft) => {
 				draft.list = action.payload.set_list;
+			}),
+		[UPDATE_EVENT]: (state, action) =>
+			produce(state, (draft) => {
+				const updIndex = draft.list.findIndex(
+					(e) => e.event_id === action.payload.id
+				);
+				draft.list[updIndex].is_complete
+					? (draft.list[updIndex].is_complete = false)
+					: (draft.list[updIndex].is_complete = true);
+				console.log(draft.list[updIndex].is_complete);
+			}),
+		[DELETE_EVENT]: (state, action) =>
+			produce(state, (draft) => {
+				const updIndex = draft.list.findIndex(
+					(e) => e.event_id === action.payload.id
+				);
+				draft.list.splice(updIndex, 1);
 			}),
 	},
 	initialState
@@ -69,13 +84,27 @@ const createEventFB = (list) => {
 	};
 };
 
-const findEventFB = (id) => {
+const updateEventFB = (id) => {
 	return async function (dispatch, getState, { history }) {
-		const eventDB = firestore.collection('schedule');
-		console.log(id);
-		eventDB.get().then((docs) => {
-			console.log(docs.id);
+		const eventDB = firestore;
+		const ref = doc(eventDB, 'schedule', id);
+		const data = await getDoc(ref);
+		const _data = data.data().list;
+		const value = _data.is_complete ? false : true;
+		await updateDoc(ref, {
+			list: {
+				..._data,
+				is_complete: value,
+			},
 		});
+		dispatch(updateEvent(id));
+	};
+};
+
+const deleteEventFB = (id) => {
+	return async function (dispatch, getState, { history }) {
+		const eventDB = firestore;
+		await deleteDoc(doc(eventDB, 'schedule', id));
 	};
 };
 
@@ -87,7 +116,8 @@ const actionCreators = {
 	deleteEvent,
 	getEventFB,
 	createEventFB,
-	findEventFB,
+	updateEventFB,
+	deleteEventFB,
 };
 
 export { actionCreators };

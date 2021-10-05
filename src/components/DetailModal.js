@@ -1,16 +1,44 @@
 // * Basic features Libiary
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as eventCreators } from '../redux/modules/schedul';
+import { Button } from '../elements';
 
 const DetailModal = ({ clickEventId }) => {
+	const _id = clickEventId;
 	const dispatch = useDispatch();
-	const id = clickEventId;
-	console.log(id);
-	dispatch(eventCreators.findEventFB(id));
+	let docData = {};
 
-	return <Modal>{clickEventId}</Modal>;
+	const detailDoc = useSelector((state) => state.schedul.list);
+	for (const doc of detailDoc) {
+		if (doc.event_id === _id) {
+			docData = doc;
+		}
+	}
+	const changeComplete = () => {
+		dispatch(eventCreators.updateEventFB(_id));
+	};
+	const deleteEvent = () => {
+		if (window.confirm('일정을 삭제하시겠습니까? ')) {
+			dispatch(eventCreators.deleteEventFB(_id));
+		}
+	};
+	console.log(docData);
+
+	return (
+		<Modal>
+			<h1>{docData.date}</h1>
+			<h1>{docData.time}</h1>
+			<h1>{docData.content}</h1>
+			<Button
+				text={'완료'}
+				_onClick={changeComplete}
+				bg={docData.is_complete ? 'orange' : 'black'}
+			/>
+			<Button text={'삭제'} _onClick={deleteEvent} />
+		</Modal>
+	);
 };
 
 DetailModal.defaultProps = {

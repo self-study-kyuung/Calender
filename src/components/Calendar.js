@@ -34,9 +34,8 @@ const Calendar = (props) => {
 	for (const event of events) {
 		event_box.push({
 			id: event.event_id,
-			title: event.content,
+			title: `${event.time} ${event.content}`,
 			date: event.date,
-			time: event.time,
 			is_complete: event.is_complete,
 		});
 	}

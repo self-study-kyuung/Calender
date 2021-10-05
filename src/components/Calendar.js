@@ -23,6 +23,8 @@ const Calendar = (props) => {
 	const [detailModal, setDetailModal] = useState(0);
 	const [clickEventId, setClickEventId] = useState([]);
 
+	const [completeEvents, setCompleteEvents] = useState(0);
+
 	// * me -> redux -> firebase
 	React.useEffect(() => {
 		dispatch(eventCreators.getEventFB());
@@ -30,15 +32,33 @@ const Calendar = (props) => {
 	const events = useSelector((state) => state.schedul.list);
 
 	// * for event box view , target.event.id (fullcal) === event.event_id (redux)
-	let event_box = [];
+	let all_event_box = [];
 	for (const event of events) {
-		event_box.push({
+		all_event_box.push({
 			id: event.event_id,
 			title: `${event.time} ${event.content}`,
 			date: event.date,
 			is_complete: event.is_complete,
+			color: event.is_complete ? 'orange' : 'blue',
 		});
 	}
+
+	let completed_event_box = [];
+	for (const event of events) {
+		if (event.is_complete) {
+			completed_event_box.push({
+				id: event.event_id,
+				title: `${event.time} ${event.content}`,
+				date: event.date,
+				is_complete: event.is_complete,
+				color: event.is_complete ? 'orange' : 'blue',
+			});
+		}
+	}
+
+	const chageEventsView = () => {
+		completeEvents ? setCompleteEvents(0) : setCompleteEvents(1);
+	};
 
 	// * + 버튼 누르면 추가 모달 둥두둘ㅇ둥두룯등장
 	const addModalClick = () => {
@@ -67,8 +87,14 @@ const Calendar = (props) => {
 			<FullCalendar
 				plugins={[dayGridPlugin, interactionPlugin]}
 				initialView="dayGridMonth"
-				events={event_box}
+				events={completeEvents ? completed_event_box : all_event_box}
 				eventClick={detailModalClick}
+			/>
+			<Button
+				text={completeEvents ? '모든 일정 보기' : '완료된 일정만 보기'}
+				width={'8rem'}
+				height={'3rem'}
+				_onClick={chageEventsView}
 			/>
 			<Button
 				shape={'circle'}

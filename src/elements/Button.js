@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Button = (props) => {
-	const { width, height, shape, text, color, bg, fs, _onClick } = props;
+	const { width, height, shape, text, color, bg, fs, _onClick, others } =
+		props;
 
 	const styles = {
 		width,
@@ -10,6 +11,7 @@ const Button = (props) => {
 		color,
 		bg,
 		fs,
+		others,
 	};
 
 	if (props.shape === 'circle') {
@@ -34,6 +36,7 @@ Button.defaultProps = {
 	color: '#fff',
 	bg: 'black',
 	fs: '1.2rem',
+	others: null,
 	_onClick: () => {},
 };
 

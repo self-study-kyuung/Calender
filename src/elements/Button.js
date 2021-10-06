@@ -2,8 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Button = (props) => {
-	const { width, height, shape, text, color, bg, fs, _onClick, others } =
-		props;
+	const {
+		width,
+		height,
+		shape,
+		text,
+		color,
+		bg,
+		fs,
+		_onClick,
+		z,
+		children,
+		bradius,
+		others,
+	} = props;
 
 	const styles = {
 		width,
@@ -11,19 +23,21 @@ const Button = (props) => {
 		color,
 		bg,
 		fs,
+		z,
+		bradius,
 		others,
 	};
 
 	if (props.shape === 'circle') {
 		return (
 			<AddBtn {...styles} onClick={_onClick}>
-				{text}
+				{children}
 			</AddBtn>
 		);
 	}
 	return (
 		<BasicBtn onClick={_onClick} {...styles}>
-			{text}
+			{children}
 		</BasicBtn>
 	);
 };
@@ -38,6 +52,9 @@ Button.defaultProps = {
 	fs: '1.2rem',
 	others: null,
 	_onClick: () => {},
+	z: 1,
+	children: '버튼',
+	bradius: 0,
 };
 
 const BasicBtn = styled.button`
@@ -50,8 +67,12 @@ const BasicBtn = styled.button`
 	justify-content: center;
 	align-items: center;
 	padding: 0.7rem;
-	border: 1px solid lightgray;
-	z-index: 3;
+	border: none;
+	z-index: ${(props) => props.z};
+	border-radius: ${(props) => props.bradius};
+	-webkit-box-shadow: 4px 7px 6px 0px rgba(56, 56, 56, 0.61);
+	box-shadow: 4px 7px 6px 0px rgba(56, 56, 56, 0.61);
+	${(props) => props.others};
 `;
 
 const AddBtn = styled.button`

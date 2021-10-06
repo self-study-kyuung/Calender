@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as eventCreators } from '../redux/modules/schedul';
-import { Button } from '../elements';
+import { Button, Grid, Text } from '../elements';
+import { useHistory } from 'react-router';
 
 const DetailModal = ({ clickEventId }) => {
 	const _id = clickEventId;
@@ -18,6 +19,7 @@ const DetailModal = ({ clickEventId }) => {
 	}
 	const changeComplete = () => {
 		dispatch(eventCreators.updateEventFB(_id));
+		if (!docData.is_complete) window.alert('일정이 완료되었습니다.');
 	};
 	const deleteEvent = () => {
 		if (window.confirm('일정을 삭제하시겠습니까? ')) {
@@ -28,15 +30,50 @@ const DetailModal = ({ clickEventId }) => {
 
 	return (
 		<Modal>
-			<h1>{docData.date}</h1>
-			<h1>{docData.time}</h1>
-			<h1>{docData.content}</h1>
-			<Button
-				text={'완료'}
-				_onClick={changeComplete}
-				bg={docData.is_complete ? 'orange' : 'black'}
-			/>
-			<Button text={'삭제'} _onClick={deleteEvent} />
+			<Grid fd={'column'} height={'18rem'}>
+				<Text
+					weight={'bold'}
+					fs={'3rem'}
+					others={'margin-bottom: 1rem'}
+				>
+					{docData.date}
+				</Text>
+				<Text
+					weight={'semiBold'}
+					fs={'2rem'}
+					others={'margin-bottom: 1rem'}
+				>
+					{docData.time}
+				</Text>
+				<Text
+					weight={'regular'}
+					fs={'1.5rem'}
+					others={'margin-bottom: 1rem'}
+				>
+					{docData.content}
+				</Text>
+			</Grid>
+			<Grid height={'5rem'}>
+				<Button
+					bradius={'20px'}
+					height={'3rem'}
+					width={'9rem'}
+					_onClick={changeComplete}
+					bg={docData.is_complete ? 'orange' : 'black'}
+					color={docData.is_complete ? 'black' : 'white'}
+					others={'margin-right: 3rem'}
+				>
+					<Text fs={'1rem'}>일정 완료</Text>
+				</Button>
+				<Button
+					_onClick={deleteEvent}
+					bradius={'20px'}
+					height={'3rem'}
+					width={'9rem'}
+				>
+					<Text fs={'1rem'}>일정 삭제</Text>
+				</Button>
+			</Grid>
 		</Modal>
 	);
 };

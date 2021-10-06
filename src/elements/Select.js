@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 const Select = (props) => {
 	const { _onChange, type } = props;
@@ -12,25 +13,25 @@ const Select = (props) => {
 
 	if (type === 'hour') {
 		return (
-			<select onChange={_onChange}>
+			<SelectBox onChange={_onChange}>
 				<option>Hours</option>
 				{hours.map((hour, idx) => (
 					<option key={idx} value={hour}>
 						{hour}
 					</option>
 				))}
-			</select>
+			</SelectBox>
 		);
 	}
 	return (
-		<select onChange={_onChange}>
+		<SelectBox onChange={_onChange}>
 			<option>Minutes</option>
 			{minutes.map((minute, idx) => (
 				<option key={idx} value={minute} name="startM">
 					{minute}
 				</option>
 			))}
-		</select>
+		</SelectBox>
 	);
 };
 
@@ -38,5 +39,15 @@ Select.defaultProps = {
 	_onChange: () => {},
 	type: 'hour',
 };
+
+const SelectBox = styled.select`
+	margin-right: 0.5rem;
+	border: 1px solid lightgray;
+	width: 4.8rem;
+	height: 1.5rem;
+	border-radius: 5px;
+	text-align: center;
+	padding: 0 2px;
+`;
 
 export default Select;

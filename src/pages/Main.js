@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Calendar from '../components/Calendar';
+import { Grid } from '../elements/index';
 
 const Main = () => {
-	// * 여기서 dispatch
 	return (
 		<React.Fragment>
 			<Calendar />

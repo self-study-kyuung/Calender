@@ -6,7 +6,7 @@ import { actionCreators as eventCreators } from '../redux/modules/schedul';
 // * Children Components
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
-import { Button, Input, Text } from '../elements/index';
+import { Button, Input, Text, Grid } from '../elements/index';
 
 // * for fullCalendar
 import FullCalendar from '@fullcalendar/react';
@@ -75,35 +75,50 @@ const Calendar = (props) => {
 	// * 아무데나 눌러도 모달 닫겨라
 	const closeModal = () => {
 		if (addModal === 1 || detailModal === 1) {
-			// setaddModal(0);
-			// setDetailModal(0);
+			console.log('close');
+			setaddModal(0);
+			setDetailModal(0);
 		}
 	};
 
 	return (
-		<section onClick={closeModal}>
+		<section style={{ padding: '4rem' }}>
 			{addModal === 1 && <AddModal />}
 			{detailModal === 1 && <DetailModal clickEventId={clickEventId} />}
-			<FullCalendar
-				plugins={[dayGridPlugin, interactionPlugin]}
-				initialView="dayGridMonth"
-				events={completeEvents ? completed_event_box : all_event_box}
-				eventClick={detailModalClick}
-			/>
+			<div onClick={closeModal}>
+				<FullCalendar
+					plugins={[dayGridPlugin, interactionPlugin]}
+					initialView="dayGridMonth"
+					events={
+						completeEvents ? completed_event_box : all_event_box
+					}
+					eventClick={detailModalClick}
+					height={'85vh'}
+				/>
+			</div>
+
 			<Button
-				text={completeEvents ? '모든 일정 보기' : '완료된 일정만 보기'}
-				width={'8rem'}
-				height={'3rem'}
+				width={'auto'}
+				height={'auto'}
+				bradius={'20px'}
 				_onClick={chageEventsView}
-			/>
+				others={'position:fixed;bottom:20px;left:50px'}
+			>
+				<Text fs={'1.1rem'} weight={'semiBold'}>
+					{completeEvents ? '모든 일정 보기' : '완료된 일정만 보기'}
+				</Text>
+			</Button>
 			<Button
 				shape={'circle'}
 				width={'3rem'}
 				height={'3rem'}
-				text="+"
-				fs="2.2rem"
+				fs={'2.2rem'}
 				_onClick={addModalClick}
-			/>
+			>
+				<Text fs={'2.2rem'} weight={'bold'}>
+					+
+				</Text>
+			</Button>
 		</section>
 	);
 };

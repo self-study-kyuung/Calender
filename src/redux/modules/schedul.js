@@ -39,7 +39,6 @@ export default handleActions(
 				draft.list[updIndex].is_complete
 					? (draft.list[updIndex].is_complete = false)
 					: (draft.list[updIndex].is_complete = true);
-				console.log(draft.list[updIndex].is_complete);
 			}),
 		[DELETE_EVENT]: (state, action) =>
 			produce(state, (draft) => {

@@ -1,5 +1,6 @@
 // * cra basic import
 import React from 'react';
+import './shared/styles/fonts/font.css';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from '../src/shared/App';

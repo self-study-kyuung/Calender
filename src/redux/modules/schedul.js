@@ -75,10 +75,16 @@ const getEventFB = () => {
 const createEventFB = (list) => {
 	return async function (dispatch, getState, { history }) {
 		const eventDB = firestore.collection('schedule');
-		eventDB.add({
-			list,
-		});
-		dispatch(createEvent(list));
+		eventDB
+			.add({
+				list,
+			})
+			.then((doc) => {
+				let _list = { event_id: doc.id, ...list };
+				dispatch(createEvent(_list));
+				history.replace('/');
+			});
+
 		window.alert('일정이 추가되었습니다.');
 	};
 };

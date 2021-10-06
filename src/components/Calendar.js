@@ -39,7 +39,7 @@ const Calendar = (props) => {
 			title: `${event.time} ${event.content}`,
 			date: event.date,
 			is_complete: event.is_complete,
-			color: event.is_complete ? 'orange' : 'blue',
+			color: event.is_complete ? 'orange' : '#4B89DC',
 		});
 	}
 
@@ -51,7 +51,7 @@ const Calendar = (props) => {
 				title: `${event.time} ${event.content}`,
 				date: event.date,
 				is_complete: event.is_complete,
-				color: event.is_complete ? 'orange' : 'blue',
+				color: event.is_complete ? 'orange' : '#4B89DC',
 			});
 		}
 	}

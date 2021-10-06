@@ -39,7 +39,7 @@ const AddModal = () => {
 				date: selectDate,
 				time: times,
 				content: contentData,
-				is_complete: 'false',
+				is_complete: false,
 			})
 		);
 	};

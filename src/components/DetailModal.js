@@ -15,6 +15,7 @@ const DetailModal = ({ clickEventId }) => {
 	for (const doc of detailDoc) {
 		if (doc.event_id === _id) {
 			docData = doc;
+			console.log(docData);
 		}
 	}
 	const changeComplete = () => {

@@ -3,9 +3,25 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as eventCreators } from '../redux/modules/schedul';
-import { Button, Grid, Text } from '../elements';
+import { Button, Grid, Text, Input, Select } from '../elements';
+
+// * .. Libiary
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const DetailModal = ({ clickEventId }) => {
+	const [startDate, setStartDate] = useState(new Date());
+	const [contentData, setContentData] = useState('');
+
+	const [updatState, setUpdateState] = useState(false);
+	const [correctValue, setCorrectValue] = useState('');
+
+	const [sHour, setSHour] = useState('');
+	const [smin, setSmin] = useState('');
+	const [eHour, setEHour] = useState('');
+	const [emin, setEmin] = useState('');
+	const times = `${sHour}:${smin}-${eHour}:${emin}`;
+
 	const _id = clickEventId;
 	const dispatch = useDispatch();
 	let docData = {};
@@ -26,30 +42,120 @@ const DetailModal = ({ clickEventId }) => {
 		}
 	};
 
+	const updateContent = () => {
+		dispatch(eventCreators.updateContentFB({ correctValue, _id }));
+		setUpdateState(false);
+	};
+
+	const updateDate = () => {
+		dispatch(eventCreators.updateDateFB({ _id, times }));
+	};
+
+	const chageView = () => {
+		updatState ? setUpdateState(false) : setUpdateState(true);
+	};
+
 	return (
 		<Modal>
 			<Grid fd={'column'} height={'18rem'}>
-				<Text
-					weight={'bold'}
-					fs={'3rem'}
-					others={'margin-bottom: 1rem'}
-				>
-					{docData.date}
-				</Text>
-				<Text
-					weight={'semiBold'}
-					fs={'2rem'}
-					others={'margin-bottom: 1rem'}
-				>
-					{docData.time}
-				</Text>
-				<Text
-					weight={'regular'}
-					fs={'1.5rem'}
-					others={'margin-bottom: 1rem'}
-				>
-					{docData.content}
-				</Text>
+				<Grid>
+					<Text
+						weight={'bold'}
+						fs={'3rem'}
+						others={'margin-bottom: 1rem'}
+					>
+						{docData.date}
+					</Text>
+					<Button
+						width={'2.6rem'}
+						height={'2.6rem'}
+						bradius={'10px'}
+						others={
+							'margin-bottom:1rem;margin-left:1rem;padding-top:1.3rem'
+						}
+						fs={'2.3rem'}
+						_onClick={chageView}
+					>
+						<i className="fas fa-eraser"></i>
+					</Button>
+				</Grid>
+				{updatState === false ? (
+					<Grid>
+						<Text
+							weight={'semiBold'}
+							fs={'2rem'}
+							others={'margin-bottom: 1rem'}
+						>
+							{docData.time}
+						</Text>
+					</Grid>
+				) : (
+					<Grid>
+						<Select
+							type={'hour'}
+							_onChange={(e) => {
+								setSHour(e.target.value);
+							}}
+						/>
+						<Select
+							type={'min'}
+							_onChange={(e) => {
+								setSmin(e.target.value);
+							}}
+						/>
+						<Select
+							type={'hour'}
+							_onChange={(e) => {
+								setEHour(e.target.value);
+							}}
+						/>
+						<Select
+							type={'min'}
+							_onChange={(e) => {
+								setEmin(e.target.value);
+							}}
+						/>
+						<Button
+							width={'2.6rem'}
+							height={'2.6rem'}
+							bradius={'10px'}
+							others={'margin-left:1rem;'}
+							_onClick={updateDate}
+						>
+							<Text>O</Text>
+						</Button>
+					</Grid>
+				)}
+				{updatState === false ? (
+					<Text
+						weight={'regular'}
+						fs={'1.5rem'}
+						others={'margin-bottom: 1rem'}
+					>
+						{docData.content}
+					</Text>
+				) : (
+					<Grid width={'30rem'} height={'2rem'}>
+						<Input
+							width={'30rem'}
+							height={'3rem'}
+							braduis={'12px'}
+							ph={'수정할 내용을 입력해주세요'}
+							fs={'1.1rem'}
+							others={'text-align:center'}
+							_onChange={(e) => setCorrectValue(e.target.value)}
+						/>
+						<Button
+							width={'2.6rem'}
+							height={'2.6rem'}
+							bradius={'10px'}
+							others={'margin-left:1rem;'}
+							_onClick={updateContent}
+						>
+							<Text>O</Text>
+						</Button>
+					</Grid>
+				)}
 			</Grid>
 			<Grid height={'5rem'}>
 				<Button

@@ -19,19 +19,19 @@ import interactionPlugin from '@fullcalendar/interaction';
 const Calendar = (props) => {
 	const dispatch = useDispatch();
 	const modalStates = useSelector((state) => state.pages);
-	console.log('>> modalStates', modalStates);
-	console.log('>> modalStates.addModalStateß', modalStates.addModalState);
 
 	// * modal button
 	const [clickEventId, setClickEventId] = useState([]);
 
 	const [completeEvents, setCompleteEvents] = useState(0);
 
+	const events = useSelector((state) => state.schedul.list);
 	// * me -> redux -> firebase
 	React.useEffect(() => {
-		dispatch(eventCreators.getEventFB());
-	}, []);
-	const events = useSelector((state) => state.schedul.list);
+		if (events.length === 0) {
+			dispatch(eventCreators.getEventFB());
+		}
+	}, [events]);
 
 	// * for event box view , target.event.id (fullcal) === event.event_id (redux)
 	let all_event_box = [];

@@ -49,7 +49,7 @@ const AddModal = () => {
 			<Input
 				braduis={'20px'}
 				ph={'일정 내용을 입력해주세요'}
-				fs={'2rem'}
+				fs={'1.2rem'}
 				text={
 					<Text
 						fs={'2rem'}

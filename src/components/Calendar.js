@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as eventCreators } from '../redux/modules/schedul';
+import { addModal, detailModal } from '../redux/modules/pages';
 
 // * Children Components
 import AddModal from './AddModal';
@@ -17,10 +18,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 const Calendar = (props) => {
 	const dispatch = useDispatch();
+	const modalStates = useSelector((state) => state.pages);
+	console.log('>> modalStates', modalStates);
+	console.log('>> modalStates.addModalStateß', modalStates.addModalState);
 
 	// * modal button
-	const [addModal, setaddModal] = useState(0);
-	const [detailModal, setDetailModal] = useState(0);
 	const [clickEventId, setClickEventId] = useState([]);
 
 	const [completeEvents, setCompleteEvents] = useState(0);
@@ -60,32 +62,37 @@ const Calendar = (props) => {
 		completeEvents ? setCompleteEvents(0) : setCompleteEvents(1);
 	};
 
-	// * + 버튼 누르면 추가 모달 둥두둘ㅇ둥두룯등장
-	const addModalClick = () => {
-		addModal === 0 ? setaddModal(1) : setaddModal(0);
-	};
-
 	// * 각 일정 누르면 디테일 모달 팝업, 정보 prop로 넘기기
 	const detailModalClick = (e) => {
-		detailModal === 0 ? setDetailModal(1) : setDetailModal(0);
+		dispatch(detailModal(true));
 		const id = e.event.id;
 		setClickEventId(id);
 	};
 
+	// * + 버튼 누르면 추가 모달 팝업
+	const addModalClick = () => {
+		console.log('[component.calendar] called');
+		dispatch(addModal(true));
+	};
+
 	// * 아무데나 눌러도 모달 닫겨라
 	const closeModal = () => {
-		if (addModal === 1 || detailModal === 1) {
-			console.log('close');
-			setaddModal(0);
-			setDetailModal(0);
+		if (
+			modalStates.addModalState === true ||
+			modalStates.detailModalState === true
+		) {
+			dispatch(detailModal(false));
+			dispatch(addModal(false));
 		}
 	};
 
 	return (
-		<section style={{ padding: '4rem' }}>
-			{addModal === 1 && <AddModal />}
-			{detailModal === 1 && <DetailModal clickEventId={clickEventId} />}
-			<div onClick={closeModal}>
+		<section>
+			{modalStates.addModalState === true && <AddModal />}
+			{modalStates.detailModalState === true && (
+				<DetailModal clickEventId={clickEventId} />
+			)}
+			<div style={{ padding: '4rem' }} onClick={closeModal}>
 				<FullCalendar
 					plugins={[dayGridPlugin, interactionPlugin]}
 					initialView="dayGridMonth"

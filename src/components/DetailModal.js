@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as eventCreators } from '../redux/modules/schedul';
 import { Button, Grid, Text } from '../elements';
-import { useHistory } from 'react-router';
 
 const DetailModal = ({ clickEventId }) => {
 	const _id = clickEventId;
@@ -15,7 +14,6 @@ const DetailModal = ({ clickEventId }) => {
 	for (const doc of detailDoc) {
 		if (doc.event_id === _id) {
 			docData = doc;
-			console.log(docData);
 		}
 	}
 	const changeComplete = () => {
@@ -27,7 +25,6 @@ const DetailModal = ({ clickEventId }) => {
 			dispatch(eventCreators.deleteEventFB(_id));
 		}
 	};
-	console.log(docData);
 
 	return (
 		<Modal>

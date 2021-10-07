@@ -110,6 +110,8 @@ const deleteEventFB = (id) => {
 	return async function (dispatch, getState, { history }) {
 		const eventDB = firestore;
 		await deleteDoc(doc(eventDB, 'schedule', id));
+		dispatch(deleteEvent(id));
+		history.replace('/');
 	};
 };
 

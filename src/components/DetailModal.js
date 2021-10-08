@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as eventCreators } from '../redux/modules/schedul';
+import { detailModal } from '../redux/modules/pages';
 import { Button, Grid, Text, Input, Select } from '../elements';
 
 // * .. Libiary
@@ -35,10 +36,12 @@ const DetailModal = ({ clickEventId }) => {
 	const changeComplete = () => {
 		dispatch(eventCreators.updateEventFB(_id));
 		if (!docData.is_complete) window.alert('일정이 완료되었습니다.');
+		dispatch(detailModal(0));
 	};
 	const deleteEvent = () => {
 		if (window.confirm('일정을 삭제하시겠습니까? ')) {
 			dispatch(eventCreators.deleteEventFB(_id));
+			dispatch(detailModal(0));
 		}
 	};
 
@@ -49,6 +52,7 @@ const DetailModal = ({ clickEventId }) => {
 
 	const updateDate = () => {
 		dispatch(eventCreators.updateDateFB({ _id, times }));
+		setUpdateState(false);
 	};
 
 	const chageView = () => {

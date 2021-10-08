@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Grid = (props) => {
-	const { children, fd, jc, ai, width, height, z, others } = props;
-	const styles = { fd, jc, ai, width, height, z, others };
+	const { children, fd, jc, ai, width, height, z, others, mediaQuery } =
+		props;
+	const styles = { fd, jc, ai, width, height, z, others, mediaQuery };
 
 	return (
 		<>
@@ -20,6 +21,7 @@ Grid.defaultProps = {
 	width: '100%',
 	height: '100%',
 	z: 1,
+	mediaQuery: false,
 };
 
 const Flexbox = styled.div`
@@ -34,4 +36,4 @@ const Flexbox = styled.div`
 	${(props) => props.others};
 `;
 
-export default Grid;
+export default React.memo(Grid);

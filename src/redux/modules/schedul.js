@@ -108,8 +108,6 @@ const createEventFB = (list) => {
 				dispatch(createEvent(_list));
 				history.replace('/');
 			});
-
-		window.alert('일정이 추가되었습니다.');
 	};
 };
 

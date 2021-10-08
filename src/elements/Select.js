@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Select = (props) => {
 	const { _onChange, type } = props;
 
-	const hours = [];
-	for (let i = 0; i < 24; i++) {
-		// ! Todo Hours 한자리수 두자리수로 맞춰줘야 함
-		hours.push(i);
-	}
+	const generateValues = (limit) => {
+		const ret = [];
+		for (let i = limit; i < 24; i++) {
+			i = String(i);
+			if (i.length < 2) {
+				i = i.padStart(2, '0');
+				ret.push(i);
+			} else {
+				ret.push(i);
+			}
+		}
+		return ret;
+	};
+
+	const [list, setList] = useState(generateValues(1));
+
 	const minutes = ['00', '30'];
 
 	if (type === 'hour') {
 		return (
 			<SelectBox onChange={_onChange}>
 				<option>Hours</option>
-				{hours.map((hour, idx) => (
+				{list.map((hour, idx) => (
 					<option key={idx} value={hour}>
 						{hour}
 					</option>
@@ -48,6 +59,9 @@ const SelectBox = styled.select`
 	border-radius: 5px;
 	text-align: center;
 	padding: 0 2px;
+	&:hover {
+		cursor: pointer;
+	}
 `;
 
-export default Select;
+export default React.memo(Select);

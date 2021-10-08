@@ -33,12 +33,18 @@ const Calendar = (props) => {
 		}
 	}, [events]);
 
+	const spliceDate = (date) => {
+		const idx = date.indexOf('-');
+		const time = `${date.slice(0, idx)}~`;
+		return time;
+	};
+
 	// * for event box view , target.event.id (fullcal) === event.event_id (redux)
 	let all_event_box = [];
 	for (const event of events) {
 		all_event_box.push({
 			id: event.event_id,
-			title: `${event.time} ${event.content}`,
+			title: `${spliceDate(event.time)} ${event.content}`,
 			date: event.date,
 			is_complete: event.is_complete,
 			color: event.is_complete ? 'orange' : '#4B89DC',
@@ -50,7 +56,7 @@ const Calendar = (props) => {
 		if (event.is_complete) {
 			completed_event_box.push({
 				id: event.event_id,
-				title: `${event.time} ${event.content}`,
+				title: `${spliceDate(event.time)} ${event.content}`,
 				date: event.date,
 				is_complete: event.is_complete,
 				color: event.is_complete ? 'orange' : '#4B89DC',

@@ -73,6 +73,9 @@ const BasicBtn = styled.button`
 	-webkit-box-shadow: 4px 7px 6px 0px rgba(56, 56, 56, 0.61);
 	box-shadow: 4px 7px 6px 0px rgba(56, 56, 56, 0.61);
 	${(props) => props.others};
+	&:hover {
+		cursor: pointer;
+	}
 `;
 
 const AddBtn = styled.button`

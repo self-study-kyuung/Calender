@@ -11,6 +11,7 @@ import { dateReplace } from '../shared/dateReplace';
 // * Add features Libiary
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { addModal } from '../redux/modules/pages';
 
 // ! ******************************************************************
 
@@ -23,6 +24,22 @@ const AddModal = () => {
 	const [eHour, setEHour] = useState('');
 	const [emin, setEmin] = useState('');
 	const times = `${sHour}:${smin}-${eHour}:${emin}`;
+
+	const _setSHour = (e) => {
+		setSHour(e.target.value);
+	};
+
+	const _setSMin = (e) => {
+		setSmin(e.target.value);
+	};
+
+	const _setEHour = (e) => {
+		setEHour(e.target.value);
+	};
+
+	const _setEMin = (e) => {
+		setEmin(e.target.value);
+	};
 
 	const dispatch = useDispatch();
 	const addEvent = () => {
@@ -42,6 +59,8 @@ const AddModal = () => {
 				is_complete: false,
 			})
 		);
+		window.alert('일정이 추가되었습니다.');
+		dispatch(addModal(0));
 	};
 
 	return (
@@ -61,12 +80,23 @@ const AddModal = () => {
 				}
 				_onChange={(e) => setContentData(e.target.value)}
 			/>
-			<Grid height={'8rem'}>
-				<Grid fd={'column'} height={'5rem'}>
+			<Grid
+				height={'12rem'}
+				others={`@media only screen and (max-width: 780px) {
+		flex-direction: column;
+	}`}
+			>
+				<Grid
+					fd={'column'}
+					height={'5rem'}
+					others={`@media only screen and (max-width: 780px) {
+		height:1rem; padding-top:2rem
+	}`}
+				>
 					<Text weight={'regular'} fs={'1rem'}>
 						날짜를 선택해주세요{' '}
 					</Text>
-					<Grid>
+					<Grid width={'9rem'}>
 						<DatePicker
 							selected={startDate}
 							onChange={(date) => setStartDate(date)}
@@ -78,30 +108,14 @@ const AddModal = () => {
 						시간을 선택해주세요{' '}
 					</Text>
 					<Grid>
+						<Select type={'hour'} _onChange={_setSHour} />
+						<Select type={'min'} _onChange={_setSMin} />
 						<Select
 							type={'hour'}
-							_onChange={(e) => {
-								setSHour(e.target.value);
-							}}
+							_onChange={_setEHour}
+							limit={sHour}
 						/>
-						<Select
-							type={'min'}
-							_onChange={(e) => {
-								setSmin(e.target.value);
-							}}
-						/>
-						<Select
-							type={'hour'}
-							_onChange={(e) => {
-								setEHour(e.target.value);
-							}}
-						/>
-						<Select
-							type={'min'}
-							_onChange={(e) => {
-								setEmin(e.target.value);
-							}}
-						/>
+						<Select type={'min'} _onChange={_setEMin} />
 					</Grid>
 				</Grid>
 			</Grid>
@@ -142,4 +156,4 @@ const Modal = styled.section`
 	border-radius: 30px;
 `;
 
-export default AddModal;
+export default React.memo(AddModal);
